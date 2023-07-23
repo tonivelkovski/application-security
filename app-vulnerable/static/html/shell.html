@@ -1,0 +1,16 @@
+<h1>Shell Attack</h1>
+
+<pre>
+  Example attack
+  1. Enter username: <code>>/dev/null;cat /etc/passwd || cat /etc/shadow</code>
+  2. Click Log in (enter)
+</pre>
+
+<form action="/shell" method="GET">
+    <label for="search">Search:</label>
+    <input id="search" type="text" name="search" placeholder="Search"/>
+    <input type="submit" value="Search">
+</form>
+
+<p id="userFilesLabel">Files:</p>
+<ol id="files">{{files}}</ol>

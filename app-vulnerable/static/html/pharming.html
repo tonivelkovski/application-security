@@ -1,0 +1,23 @@
+<h1>Pharming Attack</h1>
+
+<pre>
+  Example attack:
+  1. Enter Game name: <code>Random</code>
+  2. Enter Game link: <code>localhost:3000/malicious-website</code>
+  3. Click Post it (enter)
+  4. Click on game link
+  5. Open downloaded file and follow instructions
+  6. Try access instagram.com domain
+</pre>
+
+<h5>Post your game link</h5>
+<form action="/pharming" method="POST">
+    <label for="name">Game name:</label>
+    <input id="name" name="name" type="text" placeholder="Game name" style="width: 300px">
+    <label for="link">Game link:</label>
+    <input id="link" name="link" type="text" placeholder="Game download link" style="width: 300px">
+    <input type="submit" value="Post it" style="margin-top: 10px"/>
+</form>
+
+<h5>Community made games</h5>
+<ol id="games">{{games}}</ol>

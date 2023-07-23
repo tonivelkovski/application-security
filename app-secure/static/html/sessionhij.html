@@ -1,0 +1,67 @@
+<h1>Session Hijacking</h1>
+
+<pre>
+  Example attack
+  1. Enter username: <code>pero</code>
+  2. Enter password: <code>1234</code>
+  3. Click Log in (enter)
+  4. See generated cookie in the browser Inspect->Storage section
+  5. Open another browser (different from the first one)
+  6. Enter username: <code>luka</code>
+  7. Enter password: <code>1234</code>
+  8. Click Log in (enter)
+  9. See generated cookie in the browser Inspect->Storage section
+  10. Identify session id creation pattern
+  11. Subtract one from session id
+  12. Send GET request to /sessionHij-profile
+</pre>
+
+<form id="loginF">
+    <label for="username">Username:</label>
+    <input id="username" type="text" name="username" placeholder="username"/>
+    <br>
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password" placeholder="password"/>
+    <br>
+    <input type="submit" value="Log in" style="margin-top: 10px" onclick="sendRequest()">
+</form>
+<div id="userData" hidden>
+    <h4>User profile:</h4>
+    <p id="user-username">Username: </p>
+</div>
+<script>
+    async function sendRequest() {
+        event.preventDefault()
+
+        const userData = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        }
+
+        let req1 = await fetch('/sessionHij', {
+            method: 'POST',
+            body: JSON.stringify(userData),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+
+        let req2 = await fetch('/sessionHij-profile', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+
+        if (req1.status === 200) {
+            let res = await req2
+            let userData = JSON.parse(await res.text())
+
+            document.getElementById("loginF").hidden = true
+
+            document.getElementById("userData").hidden = false
+            document.getElementById("user-username").innerHTML += userData.user
+        }
+    }
+</script>

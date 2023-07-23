@@ -1,0 +1,67 @@
+<h1>Cross-Site Scripting (XSS)</h1>
+
+<pre>
+  Example attack
+  1. Enter comment: &lt;div onmouseover="javascript:alert('XSS')"&gt;don't look at me&lt;/div&gt;
+  2. Click Post it (enter)
+  3. Hover on the posted comment
+</pre>
+
+<form action="/xss" method="POST">
+    <label for="comment">Post comment:</label>
+    <input id="comment" name="comment" type="text" placeholder="how are you feeling today?" style="width: 300px">
+    <input type="submit" value="Post it" style="margin-top: 10px"  />
+</form>
+
+<h3>Latest comments</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Comment</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>0</td>
+        <td>Hello cyber world!</td>
+    </tr>
+    {{comments}}
+    </tbody>
+</table>
+
+<style>
+    /* Table design */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    table thead th {
+        background-color: #f2f2f2;
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    table tbody td {
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    table tbody tr:hover {
+        background-color: #e5e5e5;
+    }
+
+    table td:first-child {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+    }
+</style>

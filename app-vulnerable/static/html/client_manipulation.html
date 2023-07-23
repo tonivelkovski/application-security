@@ -1,0 +1,27 @@
+<h1>Client-side Manipulation</h1>
+
+<pre>
+  Example attack
+  1. Inspect HTML
+  2. Locate the hidden buttons
+  3. Remove <em>hidden</em> property
+</pre>
+
+<form action="/cm" method="POST">
+    <label for="username">Username:</label>
+    <input id="username" type="text" name="username" placeholder="username"/>
+    <br>
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password" placeholder="password"/>
+    <br>
+    <input type="submit" value="Log in" style="margin-top: 10px">
+</form>
+
+<p>Status: {{status}}</p>
+
+<button {{adminFeat}} type="button" onclick="javascript:alert('Power move')">Admin feature</button>
+<button {{userFeat}} type="button" onclick="javascript:alert('Weak move')">User feature</button>
+<br>
+<div style="margin-top: 20px">
+    <a href="/cm">Log out</a>
+</div>
